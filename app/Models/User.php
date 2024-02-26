@@ -42,4 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function createUser($data)
+    {
+        return self::query()->create($data);
+    }
+
+    public function findUserByEmail($email)
+    {
+        if (!empty($email))
+        {
+            return self::query()->where('email', $email)->first();
+        }
+    }
 }
