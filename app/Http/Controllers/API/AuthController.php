@@ -15,12 +15,15 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
+            'phone' => 'required|max:10',
             'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required'
         ]);
 
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['password'] = $request->password;
+        $data['phone'] = $request->phone;
 
         $user = (new User())->createUser($data);
 
@@ -51,7 +54,10 @@ class AuthController extends Controller
             ]);
         }
 
-        return $user->createToken("Access Token")->plainTextToken;
+        return response()->json([
+            'message' => 'Logged in successfully',
+            'token' => $user->createToken("Access Token")->plainTextToken
+        ]);
     }
 
     public function logout()
